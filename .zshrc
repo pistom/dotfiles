@@ -10,13 +10,11 @@ fi
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-export PATH="$HOME/Apps:$PATH"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
@@ -82,8 +80,9 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(
 	git
 	zsh-autosuggestions
+    zsh-vi-mode
 	zsh-syntax-highlighting
-)
+	)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -102,7 +101,7 @@ source $ZSH/oh-my-zsh.sh
 # fi
 
 # Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# export ARCHFLAGS="-arch $(uname -m)"
 
 # Set personal aliases, overriding those provided by Oh My Zsh libs,
 # plugins, and themes. Aliases can be placed here, though Oh My Zsh
@@ -116,10 +115,37 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+alias g:s="git status"
+alias g:aa="git add --all"
+
+# Archipad Plus TS
+alias ap="cd ~/archipad/archipad-plus-ts"
+
+alias ap:auth="~/archipad/archipad-gitops/auto-install-upgrade-oauth.sh"
+
+
+
+source ~/archipad/admin.sh
+
+apuat() { 
+	if [[ $# -gt 1 ]]; then
+		npx nx run features:cucumber-admin-$1 -- --tags @$2 --verbose
+	else	
+		npx nx run features:cucumber-admin-$1
+	fi
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 . "$HOME/.atuin/bin/env"
 
 eval "$(atuin init zsh)"
-eval "$(atuin init zsh)"
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
+
+if [ -e /home/tomasz/.nix-profile/etc/profile.d/nix.sh ]; then . /home/tomasz/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+

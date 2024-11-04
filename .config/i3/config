@@ -5,13 +5,19 @@
 # this file and re-run i3-config-wizard(1).
 #
 
+# Volume
+# exec --no-startup-id pasystray
+
+
+
 # GNOME
 exec_always --no-startup-id /usr/libexec/gsd-xsettings 
 exec_always --no-startup-id /usr/libexec/gsd-color
-exec --no-startup-id dbus-update-activation-environment --all
-exec --no-startup-id gnome-keyring-daemon --start --components=secrets
+exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh,secrets,pkcs11
 exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
-# exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+exec --no-startup-id /usr/lib/gsd-xsettings
+exec --no-startup-id /usr/libexec/gsd-xsettings
+# exec_always ~/.config/i3/scripts/gnome-keyring.sh
 
 # i3 config file (v4)
 #
@@ -21,11 +27,11 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 8
+# font pango:monospace 8
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-#font pango:DejaVu Sans Mono 8
+font pango:DejaVu Sans Mono 10
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
@@ -37,25 +43,43 @@ exec --no-startup-id dex --autostart --environment i3
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy --nofork
-bindsym $mod+Shift+x exec i3lock-fancy -p
+bindsym $mod+Shift+x exec i3lock-fancy -pg --font Cascadia
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
 # Use pactl to adjust volume in PulseAudio.
-set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+# set $refresh_i3status killall -SIGUSR1 i3status
+# bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+# bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+# bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+# bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+
+# Touchpad controls
+bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh # toggle touchpad
+
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # move tiling windows via drag & drop by left-clicking into the title bar,
 # or left-clicking anywhere into the window while holding the floating modifier.
-tiling_drag modifier titlebar
+# tiling_drag modifier titlebar
 
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
@@ -185,10 +209,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 2 px or 2 ppt
@@ -210,44 +234,39 @@ set $text-color          #eceff4
 set $inactive-text-color #d8dee9
 set $urgent-bg-color     #8952d2
 
-# window colors
-#                       border              background         text                 indicator
-# client.focused          $urgent-bg-color    $urgent-bg-color   $text-color          $urgent-bg-color
-# client.unfocused        $inactive-bg-color $inactive-bg-color  $inactive-text-color $inactive-bg-color
-# client.focused_inactive $inactive-bg-color $inactive-bg-color  $inactive-text-color $inactive-bg-color
-# client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $urgent-bg-color
+bar {
+    # font pango:CaskaydiaMono NFM 12
+    font pango: FontAwesome Medium 11
+    height 21 
+    padding 0px 
+    tray_padding 4px 
+	status_command bumblebee-status -m cpu memory pasink pasource battery weather time date -t dracula-powerline -p time.format="%H:%M:%S" date.format="%d/%m/%Y" cpu2.layout="cpu2.cpuload" cpu2.colored=1 weather.location="Cannes" memory.format=" {percent:05.02f}%"
 
-# class                 border  bground text    indicator child_border
-client.focused          #6272A4 #6272A4 #F8F8F2 #6272A4   #8be9fd
-client.focused_inactive #44475A #44475A #F8F8F2 #44475A   #6272A4
-client.unfocused        #282A36 #282A36 #BFBFBF #282A36   #6272A4
-client.urgent           #44475A #FF5555 #F8F8F2 #FF5555   #ff5555
+    colors {
+        background #282A36
+    }
+}
+
+# window colors
+#                       border background text indicator
+
+######### DRACULA #########
+client.focused          #8be9fd #8be9fd #44475A #6272A4   #8be9fd
+client.focused_inactive #8be9fd #44475A #F8F8F2 #44475A   #6272a4
+client.unfocused        #8be9fd #282A36 #BFBFBF #282A36   #6272a4
+client.urgent           #8be9fd #FF5555 #F8F8F2 #FF5555   #FF5555
 client.placeholder      #282A36 #282A36 #F8F8F2 #282A36   #282A36
 
 client.background       #F8F8F2
 
-bar {
-	height 22 
-        # font pango:DejaVu Sans Mono 10
-	font pango: Font Awesome 11
-	status_command bumblebee-status  \
-		-m cpu memory battery pasink pasource date time \
-		-t dracula-powerline
-	colors {
-		background #282A36
-	}
-}
-
-
-# bindsym $mod+d exec "dmenu_run -nf '#F8F8F2' -nb '#282A36' -sb '#6272A4' -sf '#F8F8F2' -fn 'monospace-10' -p 'dmenu%'"
-
+######### END ##########
 
 # Moving workspaces between screens 
 bindsym $mod+p move workspace to output right
 
 # Gaps
 gaps inner 2 
-# gaps outer 10
+gaps outer 2 
 
 # Keyboard
 exec xset r rate 220 60
@@ -266,6 +285,11 @@ for_window [class="Ulauncher"] floating enabled
 for_window [class="Pavucontrol"] floating enable
 for_window [class="Nemo"] floating enable
 for_window [class="xpad"] floating enable
+for_window [class="blueman-manager"] floating enable
+for_window [class="Blueman-manager"] floating enable
+for_window [class="kazam"] floating enable
+for_window [class="Kazam"] floating enable
+for_window [class="org.gnome.Nautilus"] floating enable
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
