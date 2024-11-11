@@ -125,7 +125,7 @@ alias ap:auth="~/archipad/archipad-gitops/auto-install-upgrade-oauth.sh"
 
 
 
-source ~/archipad/admin.sh
+source ~/scripts/admin.sh
 
 apuat() { 
 	if [[ $# -gt 1 ]]; then

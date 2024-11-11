@@ -271,6 +271,7 @@ gaps outer 2
 # Keyboard
 exec xset r rate 220 60
 exec_always compton 
+exec setxkbmap -optifon keypad:pointerkeys
 
 # Background
 exec_always feh --bg-fill ~/Pictures/color1.png
