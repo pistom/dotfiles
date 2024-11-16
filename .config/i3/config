@@ -217,7 +217,7 @@ exec_always compton
 exec setxkbmap -optifon keypad:pointerkeys
 
 # Background
-# exec_always feh --bg-fill ~/Pictures/color1.png
+exec_always feh --bg-fill ~/images/color_282a36.png
 
 # Apps config
 for_window [class="^.*"] border pixel 3 
