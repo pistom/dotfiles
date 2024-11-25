@@ -123,6 +123,7 @@ alias ap="cd ~/archipad/archipad-plus-ts"
 
 alias ap:auth="~/archipad/archipad-gitops/auto-install-upgrade-oauth.sh"
 
+alias ap:api="docker compose -f ~/archipad/api-archipad/docker/docker-compose.yml up -d"
 
 
 source ~/scripts/admin.sh
