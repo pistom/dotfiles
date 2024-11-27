@@ -1,0 +1,7 @@
+shell:
+  program: tmux
+  args:
+    - new-session
+    - -A
+    - -s
+    - main
