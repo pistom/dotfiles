@@ -8,7 +8,10 @@ exec --no-startup-id /usr/libexec/gsd-xsettings
 
 set $mod Mod4
 
-font pango:DejaVu Sans Mono 10
+# font pango:DejaVu Sans Mono 10
+font pango: FontAwesome Medium 10
+for_window [all] title_window_icon padding 5px
+for_window [all] titlebar_padding 10 5
 
 # Start XDG autostart .desktop files using dex. See also
 exec --no-startup-id dex --autostart --environment i3
@@ -184,6 +187,7 @@ bar {
     height 21 
     padding 0px 
     tray_padding 4px 
+    workspace_min_width 40
 	status_command bumblebee-status -m cpu memory pasink pasource battery weather time date -t dracula-powerline -p time.format="%H:%M:%S" date.format="%d/%m/%Y" cpu2.layout="cpu2.cpuload" cpu2.colored=1 weather.location="Cannes" memory.format=" {percent:05.02f}%"
 
     colors {

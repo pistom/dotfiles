@@ -7,7 +7,7 @@ program = "tmux"
 # padding               = { x = 5, y = 0 }
 dynamic_padding       = true
 decorations           = "None"
-opacity               = 0.9
+opacity               = 0.95
 blur                  = true
 
 [colors.primary]
