@@ -122,6 +122,8 @@ alias g:aa="git add --all"
 alias ap="cd ~/archipad/archipad-plus-ts"
 
 alias ap:auth="~/archipad/archipad-gitops/auto-install-upgrade-oauth.sh"
+# alias ap:auth:kratos:update="helm upgrade kratos -f /home/tomasz/archipad/archipad-gitops/bootstrap/auth/kratos/kratos-values.yaml ory/kratos --set "kratos.config.dsn=$(kubectl get secret db-access-url -o jsonpath='{.data.kratos-dsn}' | base64 -d)""
+
 
 alias ap:api="docker compose -f ~/archipad/api-archipad/docker/docker-compose.yml up -d"
 
