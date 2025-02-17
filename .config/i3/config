@@ -226,7 +226,7 @@ exec setxkbmap -optifon keypad:pointerkeys
 exec_always feh --bg-fill ~/images/color_393a59.png
 
 # Apps config
-for_window [class="^.*"] border pixel 3 
+for_window [class="^.*"] border pixel 1 
 for_window [class="MotionPro"] floating enable
 for_window [class="Gnome-calculator"] floating enable
 for_window [class="zoom"] floating enable

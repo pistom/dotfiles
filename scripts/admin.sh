@@ -6,13 +6,14 @@ function auth {
   NC='\033[0m' # No Color
   local working_dir="/home/tomasz/archipad"
   local main_dir="archipad-plus-ts"
-  local num=$1
-  local app=$2
+  local type=$1 # epic, feature
+  local num=$2
+  local app=$3
   local target_dir="main"
 
   if [[ "$num" != "main" ]]; then
     local worktrees_path="${working_dir}/${main_dir}.worktrees"
-    local base_path="${worktrees_path}/feature"
+    local base_path="${worktrees_path}/${type}"
     target_dir=$(ls -d "${base_path}/PLUS-${num}"*/ 2>/dev/null | head -n 1)
 
 
@@ -42,16 +43,17 @@ function admin {
   NC='\033[0m' # No Color
   local working_dir="/home/tomasz/archipad"
   local main_dir="archipad-plus-ts"
-  local num=$1
-  local app=$2
+  local type=$1 # epic, feature
+  local num=$2
+  local app=$3
   local target_dir="main"
   if [[ "$num" != "main" ]]; then
     local worktrees_path="${working_dir}/${main_dir}.worktrees"
-    local base_path="${worktrees_path}/feature"
+    local base_path="${worktrees_path}/${type}"
     target_dir=$(ls -d "${base_path}/PLUS-${num}"*/ 2>/dev/null | head -n 1)
   
     if [[ -z "$target_dir" ]]; then
-      echo "${RED}No admin feature found starting with PLUS-${num}${NC}"
+      echo "${RED}No admin ${type} found starting with PLUS-${num}${NC}"
       # echo "Do you want to add a new worktree? (y/n)"
       # read -r response
       vared -p "Do you want to add a new worktree? (y/n)  " -c response
@@ -103,11 +105,11 @@ function admin {
           npm install
           target_dir="${workingtree_path}"
         else
-          echo "${GREEN}Creating new feature branch based on ${BLUE}${selected_branch}${NC}..."
-          vared -p "What is the feature number? (e.g. 425)  " -c num
-          vared -p "What is the description of the new feature branch? (e.g. my-new-awesome-feature)  " -c feature_name
+          echo "${GREEN}Creating new ${type} branch based on ${BLUE}${selected_branch}${NC}..."
+          vared -p "What is the ${type} number? (e.g. 425)  " -c num
+          vared -p "What is the description of the new ${type} branch? (e.g. my-new-awesome-${type})  " -c feature_name
 
-          new_branch="feature/PLUS-${num}.${feature_name}"
+          new_branch="${type}/PLUS-${num}.${feature_name}"
           new_dir="${base_path}/PLUS-${num}.${feature_name}"
 
           echo "${GREEN}Create new branch and worktree${NC}"
