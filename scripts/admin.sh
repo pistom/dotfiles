@@ -102,7 +102,7 @@ function admin {
           cp "${workingtree_path}/apps/auth-api/.env.example" "${workingtree_path}/apps/auth-api/.env"
           cp "${workingtree_path}/apps/auth-ui/.env.example" "${workingtree_path}/apps/auth-ui/.env"
           echo "${GREEN}Install dependencies${NC}"
-          npm install
+          pnpm install
           target_dir="${workingtree_path}"
         else
           echo "${GREEN}Creating new ${type} branch based on ${BLUE}${selected_branch}${NC}..."
@@ -125,7 +125,7 @@ function admin {
             cp "${new_dir}/apps/auth-api/.env.example" "${new_dir}/apps/auth-api/.env"
             cp "${new_dir}/apps/auth-ui/.env.example" "${new_dir}/apps/auth-ui/.env"
             echo "${GREEN}Install dependencies${NC}"
-            npm install
+            pnpm install
             git branch --unset-upstream
             target_dir=$new_dir
           else
